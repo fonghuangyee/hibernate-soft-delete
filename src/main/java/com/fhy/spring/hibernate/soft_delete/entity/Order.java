@@ -1,6 +1,6 @@
 package com.fhy.spring.hibernate.soft_delete.entity;
 
-import com.fhy.spring.hibernate.soft_delete.listener.PaymentListener;
+import com.fhy.spring.hibernate.soft_delete.listener.OrderListener;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -11,10 +11,11 @@ import org.hibernate.annotations.Where;
 @Getter
 @Setter
 @Entity
+@Table(name = "t_order")
 @Where(clause = "deleted = false")
-@SQLDelete(sql = "UPDATE payment SET deleted = true WHERE id = ?")
-@EntityListeners(PaymentListener.class)
-public class Payment extends BaseEntity {
+@SQLDelete(sql = "UPDATE t_order SET deleted = true WHERE id = ?")
+@EntityListeners(OrderListener.class)
+public class Order extends BaseEntity {
 
     public int viewCount;
 
@@ -23,6 +24,6 @@ public class Payment extends BaseEntity {
     private Product product;
 
     public Product getProduct() {
-        return unproxy(product, FlushModeType.COMMIT);
+        return proxy(product);
     }
 }

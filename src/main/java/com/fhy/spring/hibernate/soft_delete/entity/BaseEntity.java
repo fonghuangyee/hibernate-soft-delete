@@ -34,7 +34,7 @@ public class BaseEntity implements Serializable {
     @Column(columnDefinition = "boolean default false")
     private boolean deleted;
 
-    protected <T> T unproxy(T object, FlushModeType flushMode) {
+    protected <T> T proxy(T object) {
         try {
             if (object != null) {
                 final LazyInitializer lazyInitializer = HibernateProxy.extractLazyInitializer(object);
@@ -42,7 +42,7 @@ public class BaseEntity implements Serializable {
                     object = (T) Hibernate.unproxy(lazyInitializer.getSession()
                             .createNativeQuery(findByIdQuery(lazyInitializer), lazyInitializer.getPersistentClass())
                             .setParameter("id", lazyInitializer.getIdentifier())
-                            .setFlushMode(flushMode)
+                            .setFlushMode(FlushModeType.COMMIT)
                             .getSingleResult());
                     BeanUtils.copyProperty(this, Conventions.getVariableName(object), object);
                     return object;
