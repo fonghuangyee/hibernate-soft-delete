@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.beanutils.BeanUtils;
 import org.hibernate.Hibernate;
 import org.hibernate.persister.entity.EntityPersister;
 import org.hibernate.persister.entity.SingleTableEntityPersister;
@@ -12,7 +11,6 @@ import org.hibernate.proxy.HibernateProxy;
 import org.hibernate.proxy.LazyInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.Conventions;
 import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
@@ -44,7 +42,6 @@ public class BaseEntity implements Serializable {
                             .setParameter("id", lazyInitializer.getIdentifier())
                             .setFlushMode(FlushModeType.COMMIT)
                             .getSingleResult());
-                    BeanUtils.copyProperty(this, Conventions.getVariableName(object), object);
                     return object;
                 }
             }
